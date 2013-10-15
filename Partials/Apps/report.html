@@ -1,0 +1,41 @@
+<div class="div-report" data-ng-controller="ReportController">
+    <div>
+        <div class="div-dates">
+            <div class="datefrom">
+                From: 
+                <input class="datepicker" type="text" datepicker-popup="yyyy-MM-dd" data-ng-model="datefrom" open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" data-ng-required="true"/>
+
+                <input class="timepicker" type="text" data-ng-model="timefrom" maxlength="4" />
+            </div>
+            <div class="dateto">
+                To:
+                <input class="datepicker" type="text" datepicker-popup="yyyy-MM-dd" data-ng-model="dateto" open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" data-ng-required="true" />
+
+                <input class="timepicker" type="text" data-ng-model="timeto" maxlength="4" />
+            </div>
+        </div>
+        <div>
+            <a class="blueButton" data-ng-click="search_report()">Search</a>
+            <a class="blueButton" data-ng-click="export_report()">Export</a>
+        </div>
+    </div>
+    <div>
+        <table class="report-tbl">
+            <tr>
+                <th class="fields" data-ng-repeat="(k,v) in report.fields">
+                    <span>{{ v.name }}</span>
+                </th>
+            </tr>
+            <tr data-ng-repeat="(k,v) in report.info">
+                <td data-ng-repeat="(key,val) in v track by $index">
+                    <span data-ng-show="(key == 0)?true:false">
+                        <a>{{val}}</a>
+                    </span>
+                    <span data-ng-show="(key == 0)?false:true">
+                        {{val}}
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

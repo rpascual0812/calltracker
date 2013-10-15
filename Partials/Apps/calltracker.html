@@ -1,0 +1,16 @@
+<div data-ng-controller="TrackerController" class="div-tracker">
+	<table class="tracker-tbl">
+		<tr data-ng-repeat="flds in calltracker.fields">
+			<td class="fields">
+				<span>{{ flds.name }}: </span>
+			</td>
+			<td class="answers">
+				<input type="text" data-ng-model="flds.answer"/>
+			</td>
+		</tr>
+	</table>
+
+	<div class="div-buttons">
+		<a class="blueButton" data-ng-click="submit_log()">Submit</a>
+	</div>
+</div>

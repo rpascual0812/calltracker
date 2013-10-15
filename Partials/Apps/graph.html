@@ -1,0 +1,45 @@
+
+<div class="div-report" data-ng-controller="GraphController">
+    <div>
+        <div class="div-dates">
+            <div class="datefrom">
+                From: 
+                <input class="datepicker" type="text" datepicker-popup="yyyy-MM-dd" data-ng-model="datefrom" open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" data-ng-required="true"/>
+
+                <input class="timepicker" type="text" data-ng-model="timefrom" maxlength="4" />
+            </div>
+            <div class="dateto">
+                To:
+                <input class="datepicker" type="text" datepicker-popup="yyyy-MM-dd" data-ng-model="dateto" open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" data-ng-required="true" />
+
+                <input class="timepicker" type="text" data-ng-model="timeto" maxlength="4" />
+            </div>
+        </div>
+        <div class="div-axes">
+            <div class="xaxis">
+                Field to count:
+                <select data-ng-model="field1">
+                    <option data-ng-repeat="fields in fields.list">{{ fields.name }}</option>
+                </select>
+                <!-- <select>
+                    <option>One</option>
+                </select> -->
+            </div>
+            <!-- <div class="yaxis">
+                Y-Axis
+                <select>
+                    <option>One</option>
+                </select>
+            </div> -->
+        </div>
+        <div>
+            <a class="blueButton" data-ng-click="search_graph()">Search</a>
+            <!-- <a class="blueButton" data-ng-click="export_report()">Export</a> -->
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div highchart id="chart1" config="chartConfig" class="span9"></div>
+        </div>
+    </div>
+</div>
