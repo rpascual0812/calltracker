@@ -129,8 +129,7 @@ EOT;
                 where datecreated between '$datefrom' and '$dateto'
                 ;
 EOT;
-        $data = ClassParent::get_array($sql);
-        return $data;
+        return ClassParent::get_array($sql);
     }
 }
 ?>
