@@ -3,23 +3,31 @@ require_once('../../Classes/ClassParent.php');
 class Users extends ClassParent{
     var $empid              = NULL;
     var $password           = NULL;
-    var $firstname          = NULL;
     var $lastname           = NULL;
+    var $firstname          = NULL;    
+    var $visibility         = false;
     var $archived           = false;
 
     public function __construct(
                                     $empid,
                                     $password,
-                                    $firstname,
                                     $lastname,
+                                    $firstname,
+                                    $visibility,
                                     $archived
                                 ){
         
-        $this->empid                = pg_escape_string(trim(strip_tags($empid)));
-        $this->password             = pg_escape_string(trim(strip_tags($password)));
-        $this->firstname            = pg_escape_string(trim(strip_tags($firstname)));
-        $this->lastname             = pg_escape_string(trim(strip_tags($lastname)));
-        $this->archived             = pg_escape_string(trim(strip_tags($archived)));
+        $fields = get_defined_vars();
+        
+        if(empty($fields)){
+            return(FALSE);
+        }
+
+        //sanitize
+        foreach($fields as $k=>$v){
+            $this->$k = pg_escape_string(trim(strip_tags($v)));
+        }
+        return(true);
     }
 
     public function auth(){
@@ -36,6 +44,55 @@ class Users extends ClassParent{
                 ;
 EOT;
         return ClassParent::get($sql);
+    }
+
+    public function fetchAll(){
+        $sql = <<<EOT
+                select
+                    empid,
+                    firstname,
+                    lastname,
+                    visibility,
+                    archived
+                from users
+                where empid != '1'
+                    and visibility = $this->visibility
+                    and archived = false
+                order by visibility
+                ;
+EOT;
+        return ClassParent::get($sql);
+    }
+
+    public function create(){
+        $sql = <<<EOT
+                insert into users
+                (empid, lastname, firstname)
+                values
+                ('$this->empid','$this->lastname','$this->firstname')
+                ;
+EOT;
+        return ClassParent::insert($sql);
+    }
+
+    public function delete(){
+        $sql = <<<EOT
+                update users
+                set archived = false
+                where empid = '$this->empid'
+                ;
+EOT;
+        return ClassParent::update($sql);
+    }
+
+    public function status(){
+        $sql = <<<EOT
+                update users
+                set visibility = '$this->visibility'
+                where empid = '$this->empid'
+                ;
+EOT;
+        return ClassParent::update($sql);
     }
 
 }

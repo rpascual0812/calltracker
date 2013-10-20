@@ -1,8 +1,12 @@
 indexApp.controller('GraphController', 
                     function($scope,
-                            adminFactory
+                            adminFactory,
+                            graphFactory,
+                            growl
                             ){
     $scope.fields = {};
+    $scope.chart = {};
+    $scope.chart.visibility = false;
 
     datepicker();
     fields();
@@ -11,10 +15,14 @@ indexApp.controller('GraphController',
         var promise = adminFactory.getGraphfields();
         promise.then(function(data){
             $scope.fields.list = data.data.data;
+            $scope.field1 = $scope.fields.list[0].name;
+
+            //show_graph();
         })
         .then(null, function(data){
             growl.addErrorMessage('No fields found.');
         })
+
     }
 
     function datepicker(){
@@ -45,7 +53,6 @@ indexApp.controller('GraphController',
         $scope.toggleMin = function() {
             $scope.minDate = ( $scope.minDate ) ? null : new Date();
         };
-        // $scope.toggleMin();
 
         $scope.open = function() {
             $timeout(function() {
@@ -59,117 +66,89 @@ indexApp.controller('GraphController',
         };
     }
 
-    $scope.chartTypes = [
-        {"id": "line", "title": "Line"},
-        {"id": "spline", "title": "Smooth line"},
-        {"id": "area", "title": "Area"},
-        {"id": "areaspline", "title": "Smooth area"},
-        {"id": "column", "title": "Column"},
-        {"id": "bar", "title": "Bar"},
-        {"id": "pie", "title": "Pie"},
-        {"id": "scatter", "title": "Scatter"}
-    ];
-
-    $scope.dashStyles = [
-        {"id": "Solid", "title": "Solid"},
-        {"id": "ShortDash", "title": "ShortDash"},
-        {"id": "ShortDot", "title": "ShortDot"},
-        {"id": "ShortDashDot", "title": "ShortDashDot"},
-        {"id": "ShortDashDotDot", "title": "ShortDashDotDot"},
-        {"id": "Dot", "title": "Dot"},
-        {"id": "Dash", "title": "Dash"},
-        {"id": "LongDash", "title": "LongDash"},
-        {"id": "DashDot", "title": "DashDot"},
-        {"id": "LongDashDot", "title": "LongDashDot"},
-        {"id": "LongDashDotDot", "title": "LongDashDotDot"}
-    ];
-
-    $scope.chartSeries = [
-        {"name": "Some data", "data": [1, 2, 4, 7, 3,9]},
-        {"name": "Some data 3", "data": [3, 1, null, 5, 2, 5], connectNulls: true},
-
-        // {"name": "Some data", "data": [1, 2, 4, 7, 3], type: "column"},
-        {"name": "Some data 3", "data": [3, 1, null, 5, 2, 5], type: "column"},
-        {"name": "Some data 2", "data": [5, 2, 2, 3, 5, 5], type: "column"},
-        {"name": "My Super Column", "data": [1, 1, 2, 3, 2, 7], type: "column"}
-    ];
-
-    $scope.chartStack = [
-        {"id": '', "title": "No"},
-        {"id": "normal", "title": "Normal"},
-        {"id": "percent", "title": "Percent"}
-    ];
-
-    $scope.addPoints = function () {
-        var seriesArray = $scope.chartConfig.series;
-        var rndIdx = Math.floor(Math.random() * seriesArray.length);
-        seriesArray[rndIdx].data = seriesArray[rndIdx].data.concat([1, 10, 20])
-    };
-
-    $scope.addSeries = function () {
-        var rnd = []
-        for (var i = 0; i < 10; i++) {
-            rnd.push(Math.floor(Math.random() * 20) + 1)
-        }
-        $scope.chartConfig.series.push({
-            data: rnd
-        })
-    }
-
-    $scope.removeRandomSeries = function () {
-        var seriesArray = $scope.chartConfig.series;
-        var rndIdx = Math.floor(Math.random() * seriesArray.length);
-        seriesArray.splice(rndIdx, 1)
-    }
-
-    $scope.removeSeries = function(id) {
-        var seriesArray = $scope.chartConfig.series;
-        seriesArray.splice(id, 1)
-    }
-
-    $scope.toggleHighCharts = function () {
-        this.chartConfig.useHighStocks = !this.chartConfig.useHighStocks
-    }
-
-    $scope.chartConfig = {
-        options: {
-            chart: {
-                type: 'areaspline'
-            },
-            plotOptions: {
-                series: {
-                    stacking: ''
-                }
-            }
-        },
-        series: $scope.chartSeries,
-        title: {
-            text: 'Calls Tracker Chart'
-        },
-        credits: {
-            enabled: false
-        },
-        loading: false,
-        exporting: {
-            sourceWidth: 400,
-            sourceHeight: 200,
-            // scale: 2 (default)
-            chartOptions: {
-                subtitle: null
-            }
-        }
-    }
-
     $scope.search_graph = function(){
+        show_graph();
+    }
+
+    function show_graph(){
+        $scope.chart.visibility = true;
         if($scope.field1){
-            var promise = adminFactory.getGraphfields();
+
+            var f = new Date($scope.datefrom);
+            var yearfrom = f.getFullYear();
+            var monthfrom = parseInt(f.getMonth())+1;
+            var dayfrom = parseInt(f.getUTCDate());
+
+            var datefrom = yearfrom+'-'+monthfrom+'-'+dayfrom+' '+$scope.timefrom;
+
+            var t = new Date($scope.dateto);
+            var yearto = t.getFullYear();
+            var monthto = parseInt(t.getMonth())+1;
+            var dayto = parseInt(t.getUTCDate());
+
+            var dateto = yearto+'-'+monthto+'-'+dayto+' '+$scope.timeto;
+            
+            var field1 = $scope.field1.replace(/\s/g,'_');
+            // var field2 = $scope.field2.replace(/\s/g,'_');
+
+            var promise = graphFactory.getGraph(datefrom,dateto,field1.toLowerCase());
             promise.then(function(data){
-                //$scope.fields.list = data.data.data;
-                
+                var list = data.data;
+
+                var chart_data = list.chartdata;
+                $scope.chart.xaxis = list.xaxis;
+
+                set_chart(chart_data);                
             })
             .then(null, function(data){
-                growl.addErrorMessage('No fields found.');
+                growl.addErrorMessage('No data found.');
             })
         }        
+    }
+
+    function set_chart(chart_data){
+        var chartseries = [];
+        chartseries.push(
+            { // spline
+                "name" : 'Line',//$scope.field1,
+                "data" : chart_data,
+                connectNulls: true
+            },
+            { // bar
+                "name": 'Bar',//'Author', 
+                "data": chart_data,
+                type: "column"
+            }
+        );
+               
+        $scope.chartSeries = chartseries;
+
+        $scope.chartConfig = {
+            options: {
+                chart: {
+                    type: 'areaspline'
+                },
+                plotOptions: {
+                    series: {
+                        stacking: ''
+                    }
+                }
+            },
+            series: $scope.chartSeries,
+            title: {
+                text: 'Calls Tracker Chart'
+            },
+            xAxis: {
+                categories: $scope.chart.xaxis
+            },
+            credits: {
+                enabled: false
+            },
+            loading: false,
+            exporting: {
+                sourceWidth: 400,
+                sourceHeight: 200
+            }
+        }
     }
 });

@@ -70,7 +70,7 @@ EOT;
                 insert into calllogs
                 (createdby, $fields)
                 values
-                ('1', $values)
+                ('1337008', $values)
                 ;
 EOT;
 
@@ -130,6 +130,26 @@ EOT;
                 ;
 EOT;
         return ClassParent::get_array($sql);
+    }
+
+    public function fetchGraph($datefrom,$dateto,$field){
+        $datefrom   = pg_escape_string(trim(strip_tags($datefrom)));
+        $dateto     = pg_escape_string(trim(strip_tags($dateto)));
+        $field      = strtolower(pg_escape_string(trim(strip_tags($field))));
+
+        $field      = $field == 'employee_id'?'createdby':$field;
+    
+        $sql = <<<EOT
+                select
+                    count(*) as count,
+                    coalesce($field::text,'EMPTY') as field
+                    -- $field as field
+                from calllogs
+                where datecreated between '$datefrom' and '$dateto'
+                group by $field
+                ;
+EOT;
+        return ClassParent::get($sql);
     }
 }
 ?>

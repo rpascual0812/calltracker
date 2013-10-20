@@ -228,3 +228,80 @@ body {
 .div-report .div-axes .yaxis select {
     width: 150px;
 }
+
+.div-users {
+    width: 100%;
+    height: auto;
+}
+
+.div-users .div-new {
+    width: 98%;
+    height: 30px;
+    border: 1px solid #CCC;
+    padding: 1%;
+}
+
+.div-users .div-new .empid {
+    width: 80px;
+}
+
+.div-users .div-new .lastname {
+    width: 150px;
+}
+
+.div-users .div-new .firstname {
+    width: 150px;
+}
+
+.div-users .div-list {
+    margin-top: 10px;
+}
+
+.div-users .div-list {
+    text-align: right;
+}
+
+.div-users .div-list a {
+    cursor: pointer;
+}
+
+.div-users .div-list .users-tbl {
+    width: 100%;
+    border: 1px solid #CCC;
+}
+
+.div-users .div-list .users-tbl tr {
+    border: 1px solid #CCC;
+    text-align: center;
+}
+
+.div-users .div-list .users-tbl tr:hover {
+    background-color: #eee;
+}
+
+.div-users .div-list .users-tbl tr th {
+    padding-left: 5px;
+    border: 1px solid #ccc;
+    height: 25px;
+    font-weight: bolder;
+    background-color: #ddd;
+}
+
+.div-users .div-list .users-tbl tr td {
+    padding-left: 5px;
+    border: 1px solid #CCC;
+    height: 25px;
+    text-align: center;
+}
+
+.div-users .div-list .users-tbl .empid {
+    width: 20%;
+}
+
+.div-users .div-list .users-tbl .options {
+    width: 15%;
+}
+
+.div-users .div-list .users-tbl .options a {
+    cursor: pointer;
+}
