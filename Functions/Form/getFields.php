@@ -6,7 +6,7 @@ $class = new Calllogs();
 
 $data = $class->fields();
 
-header("HTTP/1.0 404 User Not Found");
+header("HTTP/1.0 404 Not Found");
 if($data['status']==true){
 	header("HTTP/1.0 200 OK");
 }
