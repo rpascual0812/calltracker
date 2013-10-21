@@ -126,7 +126,7 @@ indexApp.controller('GraphController',
         $scope.chartConfig = {
             options: {
                 chart: {
-                    type: 'areaspline'
+                    type: 'spline'
                 },
                 plotOptions: {
                     series: {
@@ -137,6 +137,12 @@ indexApp.controller('GraphController',
             series: $scope.chartSeries,
             title: {
                 text: 'Calls Tracker Chart'
+            },
+            yaxis: {
+                title: {
+                    enabled: false,
+                    text: null
+                }
             },
             xAxis: {
                 categories: $scope.chart.xaxis

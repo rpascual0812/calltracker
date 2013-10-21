@@ -1,6 +1,8 @@
 <?php
 class ClassParent {
     protected function get($sql){
+        date_default_timezone_set('Asia/Manila');
+
         $query = pg_query($sql);
         $return="";
         if(pg_numrows($query)){
@@ -24,6 +26,8 @@ class ClassParent {
     }
 
     protected function get_array($sql){
+        date_default_timezone_set('Asia/Manila');
+        
         $query = pg_query($sql);
         $return="";
         if(pg_numrows($query)){

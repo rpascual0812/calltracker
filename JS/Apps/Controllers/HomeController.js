@@ -1,7 +1,8 @@
 indexApp.controller('HomeController', 
                     function($scope,
                             $window,
-                            growl
+                            growl,
+                            sessionFactory
                             ){
 
     $scope.template = {};
@@ -18,6 +19,15 @@ indexApp.controller('HomeController',
     }
 
     function init(){
+        var promise = sessionFactory.getSession();
+        promise.then(function(data){
+            //do nothing for now
+        })
+        .then(null, function(data){
+            //redirect because the user is not logged in
+            $window.location = "#/";
+        })
+
     	$scope.template.path = 'Partials/Apps/calltracker.html'; 
     }
 });

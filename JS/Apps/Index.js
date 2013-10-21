@@ -28,6 +28,11 @@ indexApp.config(function($routeProvider){
                 controller: 'HomeController',
                 templateUrl: './Partials/Apps/home.html'
             })
+        .when('/logout',
+            {
+                controller: 'LogoutController',
+                templateUrl: './Partials/Apps/logout.html'
+            })
         .otherwise({ redirectTo: '/' }
     );
 });

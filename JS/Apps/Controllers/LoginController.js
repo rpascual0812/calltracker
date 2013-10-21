@@ -1,6 +1,7 @@
 indexApp.controller('LoginController', 
                     function($scope,
                             loginFactory,
+                            sessionFactory,
                             $window,
                             growl
                             ){
@@ -9,6 +10,8 @@ indexApp.controller('LoginController',
     init();
     
     function init(){
+        checkuser();
+
         $scope.login = {
             username : undefined,
             password : undefined
@@ -22,6 +25,17 @@ indexApp.controller('LoginController',
         })
         .then(null, function(data){
             growl.addErrorMessage('User not found.');
+        })
+    }
+
+    function checkuser(){
+        var promise = sessionFactory.getSession();
+        promise.then(function(data){
+            $window.location = "#/home";
+            //no to log in
+        })
+        .then(null, function(data){
+            //do nothing for now
         })
     }
 });
