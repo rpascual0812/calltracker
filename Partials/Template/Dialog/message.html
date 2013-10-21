@@ -1,0 +1,31 @@
+<div class="ng-scope">
+    <div class="row-fluid">
+        <div class="span6">
+            <label class="checkbox"><input type="checkbox" ng-model="opts.backdrop" class="ng-pristine ng-valid">Show backdrop</label>
+            <label class="checkbox"><input type="checkbox" ng-model="opts.dialogFade" class="ng-pristine ng-valid">Fade modal dialog </label>
+            <label class="checkbox"><input type="checkbox" ng-disabled="!opts.backdrop" ng-model="opts.backdropFade" class="ng-pristine ng-valid">Fade Backdrop</label>
+            <hr>
+            <label class="checkbox"><input type="checkbox" ng-model="opts.keyboard" class="ng-pristine ng-valid">Close on Escape</label>
+            <label class="checkbox"><input type="checkbox" ng-disabled="!opts.backdrop" ng-model="opts.backdropClick" class="ng-pristine ng-valid">Close on backdrop click</label>
+        </div>
+        <div class="span6">
+            <p>Change options at will and press the open dialog button below!</p>
+            <p><button class="btn btn-primary" ng-click="openDialog()">Open Dialog</button></p>
+
+            <p>Alternatively open a simple message box:</p>
+            <p><button class="btn btn-primary" ng-click="openMessageBox()">Open Message Box</button></p>
+        </div>
+    </div>
+</div>
+
+<div class="modal ng-scope"><div class="modal-header">
+	<h3 class="ng-binding">{{title}}</h3>
+</div>
+<div class="modal-body">
+	<p class="ng-binding">{{message}}</p>
+</div>
+<div class="modal-footer">
+	<button ng-repeat="btn in buttons" ng-click="close(btn.result)" class="btn ng-scope ng-binding" ng-class="btn.cssClass">{{btn.label}}</button>
+	<!-- <button ng-repeat="btn in buttons" ng-click="close(btn.result)" class="btn ng-scope ng-binding btn-primary" ng-class="btn.cssClass">OK</button> -->
+</div>
+</div><div class="modal-backdrop"></div>

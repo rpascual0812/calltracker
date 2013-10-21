@@ -1,0 +1,36 @@
+<style>
+
+
+</style>
+
+<div>
+    <div id="tab-header">
+        <ul class="tabs">
+            <li data-ng-click="loadTemplate('calltracker')">
+                <input type="radio" checked name="tabs" id="tab1">
+                <label for="tab1">Call Tracker</label>
+            </li>
+            <li data-ng-click="loadTemplate('report')">
+                <input type="radio" name="tabs" id="tab2">
+                <label for="tab2">Dump</label>
+            </li>
+            <li data-ng-click="loadTemplate('graph')">
+                <input type="radio" name="tabs" id="tab3">
+                <label for="tab3">Graph</label>
+            </li>
+            <li data-ng-click="loadTemplate('admin')">
+                <input type="radio" name="tabs" id="tab4">
+                <label for="tab4">Form Management</label>
+            </li>
+            <li data-ng-click="loadTemplate('usermanagement')">
+                <input type="radio" name="tabs" id="tab5">
+                <label for="tab5">User Management</label>
+            </li>
+        </ul>
+    </div>
+    <div style="clear: both;"></div>
+    <hr />
+    <div id="tab-content" data-ng-include="template.path">
+        
+    </div>    
+</div>

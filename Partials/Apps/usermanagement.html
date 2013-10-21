@@ -1,0 +1,40 @@
+<div data-ng-controller="UsersController" class="div-users">
+	<div class="div-new">
+		Employee ID: <input type="text" class="empid" data-ng-model="users._new.empid" />
+		Last Name: <input type="text" class="lastname" data-ng-model="users._new.lastname" />
+		First Name: <input type="text" class="firstname" data-ng-model="users._new.firstname" />
+		<a class="blueButton" data-ng-click="new()">ADD NEW</a>
+	</div>
+	<div class="div-list">
+		<a data-ng-click="showdiabled()" data-ng-show="(users.toggle == 'enabled')?true:false">Show Disabled</a>
+		<a data-ng-click="showenabled()" data-ng-show="(users.toggle == 'disabled')?true:false">Show Enabled</a>
+		<table class="users-tbl">
+	        <tr>
+				<th class="empid">Employee ID</th>
+				<th class="fields">Last Name</th>
+				<th class="fields">First Name</th>
+				<th class="options">Options</th>
+			</tr>
+	        <tr data-ng-repeat="(k,v) in users.list">
+				<td class="empid">
+					{{ v.empid }}
+				</td>
+				<td>
+					{{ v.lastname }}
+				</td>
+				<td>
+					{{ v.firstname }}
+				</td>
+				<td class="options">
+					<a data-ng-click="changestatus({{k}})" data-ng-show="(v.visibility == 'f')?true:false">Enable</a>
+					<a data-ng-click="changestatus({{k}})" data-ng-show="(v.visibility == 't')?true:false">Disable</a>
+					|
+					<a data-ng-click="delete({{k}})">Delete</a>
+				</td>
+			</tr>
+			<tr data-ng-show="(users.list == NULL)?true:false">
+				<td colspan="4">&nbsp;</td>
+			</tr>
+	    </table>
+	</div>
+</div>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="onload">
+<head>
+    <title>Reception Online Call Tracker</title>
+    <link rel="stylesheet" type="text/css" href="./css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+
+    <link rel="stylesheet" type="text/css" href="./css/report.css">
+    <script src="./JS/angular.1.2.0rc1.js"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular.js"></script> -->
+    <script src="./JS/angular-route.min.js"></script>
+    <script src="./JS/angular-messagebox.js"></script>
+
+    <!-- HIGHCHARTS -->
+    <script src="./JS/highcharts-ng.js"></script>
+    <script src="./JS/jquery/jquery.min.1.9.1.js"></script>
+    <script src="./JS/highstock.src.js"></script>
+    <script src="./JS/highcharts-exporting.js"></script>
+
+    <!-- BOOTSTRAP -->
+    <script src="./JS/ui-bootstrap-tpls-0.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.combined.css">
+
+    <link href="./Plugins/GROWL/angular-growl.min.css" rel="stylesheet">
+    <script src="./Plugins/GROWL/angular-growl.js"></script>
+
+    <!-- MODULE -->
+    <script src="./JS/Apps/Index.js"></script>
+
+
+    <script src="./JS/Apps/Controllers/GrowlController.js"></script>
+    <script src="./JS/Apps/Controllers/LoginController.js"></script>
+    <script src="./JS/Apps/Controllers/HomeController.js"></script>
+    <script src="./JS/Apps/Controllers/TrackerController.js"></script>
+    <script src="./JS/Apps/Controllers/ReportController.js"></script>
+    <script src="./JS/Apps/Controllers/AdminController.js"></script>
+    <script src="./JS/Apps/Controllers/GraphController.js"></script>
+    <script src="./JS/Apps/Controllers/UsersController.js"></script>
+    <!-- <script src="./JS/Apps/Controllers/DatepickerController.js"></script> -->
+
+    <script src="./JS/Apps/Factories/LoginFactory.js"></script>
+    <script src="./JS/Apps/Factories/TrackerFactory.js"></script>
+    <script src="./JS/Apps/Factories/ReportFactory.js"></script>
+    <script src="./JS/Apps/Factories/AdminFactory.js"></script>
+    <script src="./JS/Apps/Factories/GraphFactory.js"></script>
+    <script src="./JS/Apps/Factories/UsersFactory.js"></script>
+
+    <script src="./JS/Apps/Directives/AlphaNumericDirective.js"></script>
+</head>
+<body data-ng-controller="GrowlController">
+<div>
+    <div growl></div>
+    <div class="header">
+
+    </div>
+    <div class="headerline"></div>
+    <div class="MainContainer" data-ng-view="">
+
+    </div>
+</div>
+
+</body>
+</html>
