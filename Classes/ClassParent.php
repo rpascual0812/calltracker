@@ -34,10 +34,9 @@ class ClassParent {
             $return['status'] = true;
             $return['sql'] = $sql;
             $return['msg'] = "Success";
-            $return['data']="";
-            while($row = pg_fetch_row($query)){
-                $row['2'] = date('Y-m-d H:i:s', strtotime($row['2']));
-                $return['data'][] = $row;
+            $return['data']=array();
+            while($row = pg_fetch_row($query)){                
+                array_push($return['data'],$row);
             }
         }
         else{

@@ -1,5 +1,5 @@
 <?php
-setcookie ("empid", "", time() - 3600);
+setcookie ("empid", "", time() - 3600, '/');
 
 $data['status'] = 'false';
 

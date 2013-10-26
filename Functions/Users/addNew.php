@@ -8,7 +8,8 @@ $class = new Users(
                     $_POST['lastname'],
                     $_POST['firstname'],
                     null,
-                    null
+                    null,
+                    $_POST['usertype']
                 );
 
 $data = $class->create();

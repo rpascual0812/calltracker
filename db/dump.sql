@@ -37,8 +37,9 @@ CREATE TABLE calllogs (
     createdby text NOT NULL,
     datecreated timestamp with time zone DEFAULT now(),
     landline numeric,
-    caller_4 text,
-    home_address text
+    caller text,
+    email text,
+    category text
 );
 
 
@@ -66,6 +67,20 @@ ALTER SEQUENCE calllog_pk_seq OWNED BY calllogs.pk;
 
 
 --
+-- Name: fields; Type: TABLE; Schema: public; Owner: reception; Tablespace: 
+--
+
+CREATE TABLE fields (
+    field text NOT NULL,
+    archived boolean DEFAULT false,
+    datecreated timestamp with time zone DEFAULT now(),
+    type text NOT NULL
+);
+
+
+ALTER TABLE public.fields OWNER TO reception;
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: reception; Tablespace: 
 --
 
@@ -75,7 +90,8 @@ CREATE TABLE users (
     firstname text NOT NULL,
     lastname text NOT NULL,
     visibility boolean DEFAULT true,
-    archived boolean DEFAULT false
+    archived boolean DEFAULT false,
+    usertype text DEFAULT 'Agent'::text NOT NULL
 );
 
 
@@ -92,14 +108,32 @@ ALTER TABLE ONLY calllogs ALTER COLUMN pk SET DEFAULT nextval('calllog_pk_seq'::
 -- Name: calllog_pk_seq; Type: SEQUENCE SET; Schema: public; Owner: reception
 --
 
-SELECT pg_catalog.setval('calllog_pk_seq', 17, true);
+SELECT pg_catalog.setval('calllog_pk_seq', 35, true);
 
 
 --
 -- Data for Name: calllogs; Type: TABLE DATA; Schema: public; Owner: reception
 --
 
-COPY calllogs (pk, createdby, datecreated, landline, caller_4, home_address) FROM stdin;
+COPY calllogs (pk, createdby, datecreated, landline, caller, email, category) FROM stdin;
+25	1337008	2013-10-22 23:20:36.371023+08	434234	skjfklj	kjsdlkfjsd	\N
+26	1337008	2013-10-22 23:21:30.925729+08	7281974	Rafael	Pasig	\N
+27	1337008	2013-10-22 23:21:43.240011+08	7381974	Pascual	Pasig	\N
+29	1337008	2013-10-26 10:02:47.803553+08	3434	sdfsdf	sdfsdfsdf	sdfsdfs
+33	1332025	2013-10-26 16:55:40.04932+08	234234	dfgsdf	gsdfgsdf	\N
+35	1337008	2013-10-26 20:26:42.163087+08	345345	eter	tertert	\N
+\.
+
+
+--
+-- Data for Name: fields; Type: TABLE DATA; Schema: public; Owner: reception
+--
+
+COPY fields (field, archived, datecreated, type) FROM stdin;
+email	f	2013-10-26 09:53:34.263106+08	text
+landline	f	2013-10-26 09:53:19.099819+08	integer
+caller	f	2013-10-26 09:53:29.434414+08	text
+category	t	2013-10-26 09:53:40.244158+08	text
 \.
 
 
@@ -107,8 +141,11 @@ COPY calllogs (pk, createdby, datecreated, landline, caller_4, home_address) FRO
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: reception
 --
 
-COPY users (empid, password, firstname, lastname, visibility, archived) FROM stdin;
-1	c4ca4238a0b923820dcc509a6f75849b	System	Admin	t	f
+COPY users (empid, password, firstname, lastname, visibility, archived, usertype) FROM stdin;
+1337008	067f9a97c339b9221406a280ba901383	Rafael	Pascual	t	f	Agent
+1332025	067f9a97c339b9221406a280ba901383	Fernandez	Jonabelle	f	f	Agent
+1	c4ca4238a0b923820dcc509a6f75849b	System	Admin	t	f	Admin
+1220000	067f9a97c339b9221406a280ba901383	Yo	Hey	t	t	Agent
 \.
 
 

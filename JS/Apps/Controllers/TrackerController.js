@@ -19,7 +19,7 @@ indexApp.controller('TrackerController',
             $scope.calltracker.fields = data.data.data;
         })
         .then(null, function(data){
-            growl.addErrorMessage('User not found.');
+            growl.addErrorMessage('No fields found.');
         })
     }
 

@@ -3,18 +3,44 @@ indexApp.controller('ReportController',
                             reportFactory,
                             adminFactory,
                             $window,
-                            growl
+                            growl,
+                            $dialog
                             ){
 
     init();
 
     $scope.report = {};
+    $scope.empid = 'All';
+    $scope.loggeduser = {};
     
     function init(){
-        datepicker()
+        datepicker();
+        author();
+        current_user();
+    }
+
+    function author(){
+        var promise = reportFactory.getAuthors();
+        promise.then(function(data){
+            $scope.author = data.data.data;
+        })
+        .then(null, function(data){
+            growl.addErrorMessage('No users found.');
+        })
+    }
+
+    function current_user(){
+        var promise = reportFactory.currentuser();
+        promise.then(function(data){
+            $scope.loggeduser = data.data.data[0];
+        })
     }
 
     $scope.search_report = function(){
+        report();
+    }
+
+    function report(){
         var f = new Date($scope.datefrom);
         var yearfrom = f.getFullYear();
         var monthfrom = parseInt(f.getMonth())+1;
@@ -29,27 +55,15 @@ indexApp.controller('ReportController',
 
         var dateto = yearto+'-'+monthto+'-'+dayto+' '+$scope.timeto;
         $scope.report.info = {};
-        var promise = reportFactory.getReport(datefrom,dateto);
+
+        var promise = reportFactory.getReport(datefrom,dateto,$scope.empid);
         promise.then(function(data){
             $scope.report.info = data.data.data;
-            // console.log($scope.report.info);
+            $scope.report.fields = data.data.fields;
+            
         })
         .then(null, function(data){
             growl.addErrorMessage('No data found.');
-        })
-
-        var promise = adminFactory.getAllfields();
-        promise.then(function(data){
-            $scope.report.fields = data.data.data;
-            $scope.report.fields.push({
-                answer : null,
-                field : 'employee_name',
-                name : 'Employee Name',
-                type : 'text'
-            });
-        })
-        .then(null, function(data){
-            growl.addErrorMessage('No fields found.');
         })
     }
 
@@ -68,7 +82,7 @@ indexApp.controller('ReportController',
 
         var dateto = yearto+'-'+monthto+'-'+dayto+' '+$scope.timeto;
         
-        $window.location = 'Functions/Report/exportReport.php?datefrom='+datefrom+'&dateto='+dateto;
+        $window.location = 'Functions/Report/exportReport.php?datefrom='+datefrom+'&dateto='+dateto+'&empid='+$scope.empid;
     }
 
     function datepicker(){
@@ -113,5 +127,27 @@ indexApp.controller('ReportController',
         };
     }
 
-    // $scope.datepicker = {date: new Date("2012-10-01T00:00:00.000Z")};
+    $scope.deletecall = function(k){
+        console.log($scope.report.info);
+        var title = 'Warning!';
+        var msg = 'Are you sure you want to delete entry with ID # '+$scope.report.info[k][0]+'? This action can not be undone. Please confirm.';
+        var btns = [{result:'cancel', label: 'CANCEL'}, {result:'ok', label: 'DELETE', cssClass: 'btn-primary'}];
+        var file = 'Partials/Template/Dialog/message.html';
+
+        $dialog.messageBox(title, msg, btns, file)
+        .open()
+        .then(function(result){
+            if(result == 'ok'){
+                var promise = reportFactory.deletecall($scope.report.info[k]);
+                promise.then(function(data){
+                    growl.addSuccessMessage($scope.report.info[k][0]+' has been deleted.');
+                    report();
+                    //$scope.report.info.splice(k);
+                })
+                .then(null, function(data){
+                    growl.addErrorMessage('An error occurred while deleting '+$scope.report.info[k].lastname+'. Please try again.');
+                })
+            }
+        });
+    }
 });

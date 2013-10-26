@@ -138,10 +138,10 @@ indexApp.controller('GraphController',
             title: {
                 text: 'Calls Tracker Chart'
             },
-            yaxis: {
+            yAxis: {
                 title: {
-                    enabled: false,
-                    text: null
+                    enabled: true,
+                    text: 'Total'
                 }
             },
             xAxis: {

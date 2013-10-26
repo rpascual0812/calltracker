@@ -15,7 +15,7 @@ $data = $class->auth();
 
 header("HTTP/1.0 404 User Not Found");
 if($data['status']==true){
-	setcookie("empid", $_POST['username'], time()+3600*24);
+	setcookie("empid", $_POST['username'], time()+3600*24, '/');
 
 	header("HTTP/1.0 200 OK");
 }

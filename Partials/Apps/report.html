@@ -13,6 +13,13 @@
 
                 <input class="timepicker" type="text" data-ng-model="timeto" maxlength="4" />
             </div>
+            <div class="author">
+                Author:
+                <select data-ng-model="empid">
+                    <option value="All">All</option>
+                    <option data-ng-repeat="author in author" value="{{author.empid}}">{{author.firstname}} {{author.lastname}}</option>
+                </select>
+            </div>
         </div>
         <div>
             <a class="blueButton" data-ng-click="search_report()">Search</a>
@@ -23,8 +30,9 @@
         <table class="report-tbl">
             <tr>
                 <th class="fields" data-ng-repeat="(k,v) in report.fields">
-                    <span>{{ v.name }}</span>
+                    <span>{{ v }}</span>
                 </th>
+                <th data-ng-show="(loggeduser.usertype == 'Admin')?true:false">&nbsp;</th>
             </tr>
             <tr data-ng-repeat="(k,v) in report.info">
                 <td data-ng-repeat="(key,val) in v track by $index">
@@ -34,6 +42,9 @@
                     <span data-ng-show="(key == 0)?false:true">
                         {{val}}
                     </span>
+                </td>
+                <td data-ng-show="(loggeduser.usertype == 'Agent')?false:true">
+                    <a data-ng-click="deletecall(k)">Delete</a>
                 </td>
             </tr>
         </table>

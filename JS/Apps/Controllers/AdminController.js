@@ -7,16 +7,17 @@ indexApp.controller('adminController',
                             ){
 
     $scope.admin = {};
+    $scope.admin.toggle = 'enabled';
     init();    
     
     function init(){
-        adminForm();
+        adminForm('false');
         $scope.admin._new = {};
         $scope.admin._new.type = 'text';
     }
 
-    function adminForm(){
-        var promise = adminFactory.getfields();
+    function adminForm(archived){
+        var promise = adminFactory.getfields(archived);
         promise.then(function(data){
             $scope.admin.fields = data.data.data;
         })
@@ -47,19 +48,43 @@ indexApp.controller('adminController',
         })
     }
 
-    $scope.deleteField = function(k){
+    $scope.disableField = function(k){
         var title = 'Warning!';
-        var msg = 'Are you sure you want to delete '+$scope.admin.fields[k].name+'? This action can not be undone. Please confirm.';
-        var btns = [{result:'cancel', label: 'CANCEL'}, {result:'ok', label: 'DELETE', cssClass: 'btn-primary'}];
+        var msg = 'Are you sure you want to disable '+$scope.admin.fields[k].name+'? Please confirm.';
+        var btns = [{result:'cancel', label: 'CANCEL'}, {result:'ok', label: 'DISABLE', cssClass: 'btn-primary'}];
         var file = 'Partials/Template/Dialog/message.html';
 
         $dialog.messageBox(title, msg, btns, file)
         .open()
         .then(function(result){
             if(result == 'ok'){
-                var promise = adminFactory.dropfield($scope.admin.fields[k]);
+                $scope.admin.fields[k].archived = 't';
+                var promise = adminFactory.archivefield($scope.admin.fields[k]);
                 promise.then(function(data){
-                    growl.addSuccessMessage($scope.admin.fields[k].name+' has been deleted.');
+                    growl.addSuccessMessage($scope.admin.fields[k].name+' has been disabled.');
+                    $scope.admin.fields.splice(k);
+                })
+                .then(null, function(data){
+                    growl.addErrorMessage('An error occurred while deleting '+$scope.admin.fields[k].name+'. Please try again.');
+                })
+            }
+        });
+    }
+
+    $scope.enableField = function(k){
+        var title = 'Warning!';
+        var msg = 'Are you sure you want to enable '+$scope.admin.fields[k].name+'? Please confirm.';
+        var btns = [{result:'cancel', label: 'CANCEL'}, {result:'ok', label: 'ENABLE', cssClass: 'btn-primary'}];
+        var file = 'Partials/Template/Dialog/message.html';
+
+        $dialog.messageBox(title, msg, btns, file)
+        .open()
+        .then(function(result){
+            if(result == 'ok'){
+                $scope.admin.fields[k].archived = 'f';
+                var promise = adminFactory.archivefield($scope.admin.fields[k]);
+                promise.then(function(data){
+                    growl.addSuccessMessage($scope.admin.fields[k].name+' has been enabled.');
                     $scope.admin.fields.splice(k);
                 })
                 .then(null, function(data){
@@ -92,5 +117,17 @@ indexApp.controller('adminController',
                 })
             }
         });
+    }
+
+    $scope.showenabled = function(){
+        $scope.admin.fields = null;
+        $scope.admin.toggle = 'enabled';
+        adminForm('false');
+    }
+
+    $scope.showdiabled = function(){
+        $scope.admin.fields = null;
+        $scope.admin.toggle = 'disabled';
+        adminForm('true');
     }
 });

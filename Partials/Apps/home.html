@@ -1,9 +1,9 @@
-<style>
-
-
-</style>
-
 <div>
+    <div class="div-loggeduser">
+        <span>{{ loggeduser.firstname }} {{ loggeduser.lastname }}</span>
+        |
+        <a href="#/logout" class="logout">Log out</a>
+    </div>
     <div id="tab-header">
         <ul class="tabs">
             <li data-ng-click="loadTemplate('calltracker')">
@@ -18,11 +18,11 @@
                 <input type="radio" name="tabs" id="tab3">
                 <label for="tab3">Graph</label>
             </li>
-            <li data-ng-click="loadTemplate('admin')">
+            <li data-ng-click="loadTemplate('admin')" data-ng-show="(loggeduser.usertype == 'Admin')?true:false">
                 <input type="radio" name="tabs" id="tab4">
                 <label for="tab4">Form Management</label>
             </li>
-            <li data-ng-click="loadTemplate('usermanagement')">
+            <li data-ng-click="loadTemplate('usermanagement')" data-ng-show="(loggeduser.usertype == 'Admin')?true:false">
                 <input type="radio" name="tabs" id="tab5">
                 <label for="tab5">User Management</label>
             </li>
@@ -30,6 +30,7 @@
     </div>
     <div style="clear: both;"></div>
     <hr />
+    
     <div id="tab-content" data-ng-include="template.path">
         
     </div>    

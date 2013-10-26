@@ -5,11 +5,11 @@
 				<span>{{ flds.name }}: </span>
 			</td>
 			<td class="answers">
-				<input type="text" data-ng-model="flds.answer"/>
+				<input type="text" data-ng-model="flds.answer" data-ng-show="(flds.type=='integer')?false:true" />
+				<input type="text" data-ng-model="flds.answer" numeric-validation data-ng-show="(flds.type=='integer')?true:false" />
 			</td>
 		</tr>
 	</table>
-
 	<div class="div-buttons">
 		<a class="blueButton" data-ng-click="submit_log()">Submit</a>
 	</div>

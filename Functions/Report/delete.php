@@ -4,7 +4,7 @@ require_once('../../Classes/Calllogs.php');
 
 $class = new Calllogs();
 
-$data = $class->drop($_POST);
+$data = $class->delete($_POST['pk']);
 
 header("HTTP/1.0 404 User Not Found");
 if($data['status']==true){

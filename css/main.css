@@ -23,7 +23,7 @@ body {
 
 .header {
     width: 100%;
-    height: 60px;
+    height: 40px;
     /*padding-top: 15px;*/
     background-color: #0c79be;
 }
@@ -87,6 +87,20 @@ body {
     padding-right: 130px;
 }
 
+.div-loggeduser {
+    height: 20px;
+    padding: 10px;
+
+    font-weight: bold;
+    text-align: right;
+    margin-top: -50px;
+    margin-right: -100px;
+}
+
+.div-loggeduser .logout {
+    color: #960000;
+} 
+
 .div-tracker {
     width: 100%;
     height: 80%;
@@ -117,44 +131,54 @@ body {
     height: auto;
 }
 
-.div-admin .admin-tbl{
-    width: 50% !important;
+.div-admin .div-list {
+    width: 60%;
+    text-align: right;
+    margin-top: 20px;
+}
+
+.div-admin .div-list .admin-tbl{
+    width: 100%;
     margin-bottom: 50px;
     border: 1px solid #CCC;
 }
 
-.div-admin .admin-tbl tr th {
+.div-admin .div-list .admin-tbl tr th {
     border: 1px solid #CCC;
     background-color: #CCC;
     height: 40px;
+    padding-left: 10px;
+    text-align: center;
 }
 
-.div-admin .admin-tbl tr td {
+.div-admin .div-list .admin-tbl tr td {
+    border: 1px solid #CCC;
     padding-left: 5px;
+    text-align: left;
 }
 
-.div-admin .admin-tbl .fields {
+.div-admin .div-list .admin-tbl .fields {
     height: 30px;
     width: 70%;
 }
 
-.div-admin .admin-tbl .options {
+.div-admin .div-list .admin-tbl .options {
     text-align: center;
     cursor: pointer;
     width: 30%;
 }
 
-.div-admin .div-new input[type=text]{
+.div-admin .div-list .div-new input[type=text]{
     width: 300px;
     margin-top: 5px;
 }
 
-.div-admin .div-new select {
+.div-admin .div-list .div-new select {
     margin-top: 5px;
-    width: 100px;
+    width: 50px !important;
 }
 
-.div-admin .admin-tbl tr:hover {
+.div-admin .div-list .admin-tbl tr:hover {
     background-color: #eee;
 }
 
@@ -166,6 +190,10 @@ body {
 .div-report .report-tbl {
     width: 100%;
     border: 1px solid #CCC;
+}
+
+.div-report .report-tbl a {
+    cursor: pointer;
 }
 
 .div-report .report-tbl tr {
@@ -200,6 +228,11 @@ body {
 }
 
 .div-report .div-dates .dateto {
+    margin-left: 10px;
+    float: left;
+}
+
+.div-report .div-dates .author {
     margin-left: 10px;
     float: left;
 }
@@ -253,6 +286,10 @@ body {
     width: 150px;
 }
 
+.div-users .div-new .firstname {
+    width: 130px !important;
+}
+
 .div-users .div-list {
     margin-top: 10px;
 }
@@ -304,4 +341,48 @@ body {
 
 .div-users .div-list .users-tbl .options a {
     cursor: pointer;
+}
+
+.div-backup {
+    width: 100%;
+    height: auto;
+}
+
+.div-backup .button {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.div-backup .list .tbl-list {
+    margin: 0 auto;
+    width: 80%;
+    border: 1px solid #CCC;
+}
+
+.div-backup .list .tbl-list tr {
+    border: 1px solid #CCC;
+    text-align: center;
+}
+
+.div-backup .list .tbl-list tr:hover {
+    background-color: #eee;
+}
+
+.div-backup .list .tbl-list tr th {
+    padding-left: 5px;
+    border: 1px solid #ccc;
+    height: 25px;
+    font-weight: bolder;
+    background-color: #ddd;
+}
+
+.div-backup .list .tbl-list tr td {
+    padding-left: 5px;
+    border: 1px solid #CCC;
+    height: 25px;
+    text-align: center;
+}
+
+.disabled {
+    color: #CCC !important;
 }

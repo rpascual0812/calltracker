@@ -1,9 +1,26 @@
 indexApp.factory('adminFactory', function($http){
     var factory = {};           
     
-    factory.getfields = function(){
+    factory.getfields = function(archived){
         var promise = $http({
             url:'./Functions/Form/getFields.php',
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data : {archived : archived}
+        })
+
+        return promise;
+    };
+
+    factory.getAllfields = function(){
+        var promise = $http({
+            url:'./Functions/Form/getAllFields.php',
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
@@ -14,16 +31,6 @@ indexApp.factory('adminFactory', function($http){
     factory.getGraphfields = function(){
         var promise = $http({
             url:'./Functions/Form/getGraphFields.php',
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        })
-
-        return promise;
-    };
-
-    factory.getAllfields = function(){
-        var promise = $http({
-            url:'./Functions/Form/getAllFields.php',
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
@@ -53,13 +60,14 @@ indexApp.factory('adminFactory', function($http){
         return promise;
     }
 
-    factory.dropfield = function(data){
+    factory.archivefield = function(data){
         var code_arr = {
-            field : data.field
+            field : data.field,
+            archived : data.archived
         };
 
         var promise = $http({
-            url:'./Functions/Form/dropField.php',
+            url:'./Functions/Form/archiveField.php',
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function(obj) {

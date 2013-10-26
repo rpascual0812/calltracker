@@ -10,6 +10,7 @@ indexApp.controller('UsersController',
 
     $scope.users = {};
     $scope.users._new = {};
+    $scope.users._new.usertype = 'Agent';
     $scope.users.toggle = 'enabled';
     
     function init(){
@@ -28,11 +29,13 @@ indexApp.controller('UsersController',
     }
 
     $scope.showenabled = function(){
+        $scope.users.list = null;
         $scope.users.toggle = 'enabled';
         users();
     }
 
     $scope.showdiabled = function(){
+        $scope.users.list = null;
         $scope.users.toggle = 'disabled';
         var promise = usersFactory.getusers('false');
         promise.then(function(data){
@@ -43,7 +46,7 @@ indexApp.controller('UsersController',
         })
     }
 
-    $scope.new = function(){
+    $scope.newuser = function(){
         var promise = usersFactory.newUser($scope.users._new);
         promise.then(function(data){
             growl.addSuccessMessage('User added. Default password is acquire123#');
@@ -81,7 +84,7 @@ indexApp.controller('UsersController',
         })
     }
 
-    $scope.delete = function(k){
+    $scope.deleteuser = function(k){
         var title = 'Warning!';
         var msg = 'Are you sure you want to delete '+$scope.users.list[k].firstname+" "+$scope.users.list[k].lastname+'? Please confirm.';
         var btns = [{result:'cancel', label: 'CANCEL'}, {result:'ok', label: 'DELETE', cssClass: 'btn-primary'}];

@@ -4,7 +4,7 @@ require_once('../../Classes/Calllogs.php');
 
 $class = new Calllogs();
 
-$data = $class->fetchAll($_POST['datefrom'],$_POST['dateto'],$_POST['author']);
+$data = $class->archive($_POST);
 
 header("HTTP/1.0 404 User Not Found");
 if($data['status']==true){

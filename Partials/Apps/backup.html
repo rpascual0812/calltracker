@@ -1,0 +1,17 @@
+<div class="div-backup" data-ng-controller="BackupController">
+	<div class="button">
+		<a class="redButton" data-ng-click="backup()">Create a backup</a>
+	</div>
+	<div class="list">
+		<table class="tbl-list">
+			<tr>
+				<th>Files</th>
+				<th>Options</th>
+			</tr>
+			<tr data-ng-repeat="files in backup.list">
+				<td>{{files}}</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+</div>

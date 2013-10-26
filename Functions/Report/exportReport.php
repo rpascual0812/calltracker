@@ -4,25 +4,17 @@ require_once('../../Classes/Calllogs.php');
 
 $class = new Calllogs();
 
-$fields = $class->allfields();
-$data = $class->fetchAll($_GET['datefrom'],$_GET['dateto']);
+$data = $class->fetchAll($_GET['datefrom'],$_GET['dateto'],$_GET['empid']);
 
 $date = date('Ymd');
 
-// echo "<pre>";
-// print_r($data['data']);
-// echo "</pre>";
-
 $header=[];
-
-for($i=0;$i<count($fields['data']);$i++){
-	if($fields['data'][$i]['name'] == 'Option'){
-		$fields['data'][$i]['name'] = 'ID';
-	}
-	array_push($header,'"'.$fields['data'][$i]['name'].'"');
+$data['fields'][0] = 'ID';
+for($i=0;$i<count($data['fields']);$i++){
+	array_push($header,'"'.$data['fields'][$i].'"');
 }
 
-$header = implode(',', $header).',"Employee Name"'."\n";
+$header = implode(',', $header)."\n";
 
 $body='';
 for($i=0;$i<count($data['data']);$i++){
@@ -31,7 +23,6 @@ for($i=0;$i<count($data['data']);$i++){
 		array_push($row,'"'.$data['data'][$i][$j].'"');
 	}
 	$body .= implode(',', $row)."\n";
-	//array_push($header,$fields['data'][$i]['name']);
 }
 
 header("Content-type: application/octet-stream");

@@ -1,27 +1,33 @@
 <div data-ng-controller="adminController" class="div-admin">
-	<table class="admin-tbl">
-		<tr>
-			<th>Field Name</th>
-			<th>Options</th>
-		</tr>
-		<tr data-ng-repeat="(k,v) in admin.fields">
-			<td class="fields">
-				<span>{{ v.name }}</span>
-			</td>
-			<td class="options">
-				<a data-ng-click="renameField({{k}})">Rename</a>
-				|
-				<a data-ng-click="deleteField({{k}})">Delete</a>
-			</td>
-		</tr>
-	</table>
-
 	<div class="div-new">
 		<input type="text" data-ng-model="admin._new.field" data-ng-trim="false" alphanumeric-validation/>
 		<select data-ng-model="admin._new.type">
-			<option value="text">text</option>
-			<option value="numeric">number</option>
+			<option value="text">Text & Numbers</option>
+			<option value="numeric">Numbers Only</option>
 		</select>
-		<a class="oliveButton" data-ng-click="addField()">ADD</a>
+		<a class="blueButton" data-ng-click="addField()">ADD</a>
 	</div>
+	<div class="div-list">
+		<a data-ng-click="showdiabled()" data-ng-show="(admin.toggle == 'enabled')?true:false">Show Disabled</a>
+		<a data-ng-click="showenabled()" data-ng-show="(admin.toggle == 'disabled')?true:false">Show Enabled</a>
+		<table class="admin-tbl">
+			<tr>
+				<th>Field Name</th>
+				<th>Options</th>
+			</tr>
+			<tr data-ng-repeat="(k,v) in admin.fields">
+				<td class="fields">
+					<span>{{ v.name }}</span>
+				</td>
+				<td class="options">
+					<a data-ng-click="renameField({{k}})">Rename</a>
+					|
+					<a data-ng-click="disableField({{k}})" data-ng-show="(admin.toggle == 'enabled')?true:false">Disable</a>
+					<a data-ng-click="enableField({{k}})" data-ng-show="(admin.toggle == 'disabled')?true:false">Enable</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	
 </div>

@@ -3,16 +3,16 @@ require_once('../connect.php');
 require_once('../../Classes/Users.php');
 
 $class = new Users(
-					null,
+					$_COOKIE['empid'],
                     null,
                     null,
                     null,
-                    $_POST['visibility'],
+                    null,
                     null,
                     null
                 );
 
-$data = $class->fetchAll();
+$data = $class->fetch();
 
 header("HTTP/1.0 500");
 if($data['status']==true){

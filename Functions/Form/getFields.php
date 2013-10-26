@@ -4,7 +4,7 @@ require_once('../../Classes/Calllogs.php');
 
 $class = new Calllogs();
 
-$data = $class->fields();
+$data = $class->fields($_POST['archived']);
 
 header("HTTP/1.0 404 Not Found");
 if($data['status']==true){

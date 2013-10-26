@@ -7,6 +7,7 @@ class Users extends ClassParent{
     var $firstname          = NULL;    
     var $visibility         = false;
     var $archived           = false;
+    var $usertype           = NULL;
 
     public function __construct(
                                     $empid,
@@ -14,7 +15,8 @@ class Users extends ClassParent{
                                     $lastname,
                                     $firstname,
                                     $visibility,
-                                    $archived
+                                    $archived,
+                                    $usertype
                                 ){
         
         $fields = get_defined_vars();
@@ -53,7 +55,8 @@ EOT;
                     firstname,
                     lastname,
                     visibility,
-                    archived
+                    archived,
+                    usertype
                 from users
                 where empid != '1'
                     and visibility = $this->visibility
@@ -64,12 +67,28 @@ EOT;
         return ClassParent::get($sql);
     }
 
+    public function fetch(){
+        $sql = <<<EOT
+                select
+                    empid,
+                    firstname,
+                    lastname,
+                    visibility,
+                    archived,
+                    usertype
+                from users
+                where empid = '$this->empid'
+                ;
+EOT;
+        return ClassParent::get($sql);
+    }
+
     public function create(){
         $sql = <<<EOT
                 insert into users
-                (empid, lastname, firstname)
+                (empid, lastname, firstname, usertype)
                 values
-                ('$this->empid','$this->lastname','$this->firstname')
+                ('$this->empid','$this->lastname','$this->firstname','$this->usertype')
                 ;
 EOT;
         return ClassParent::insert($sql);
@@ -78,7 +97,7 @@ EOT;
     public function delete(){
         $sql = <<<EOT
                 update users
-                set archived = false
+                set archived = true
                 where empid = '$this->empid'
                 ;
 EOT;

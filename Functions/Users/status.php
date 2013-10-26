@@ -8,6 +8,7 @@ $class = new Users(
                     null,
                     null,
                     $_POST['visibility'],
+                    null,
                     null
                 );
 

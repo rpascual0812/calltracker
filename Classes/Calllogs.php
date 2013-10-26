@@ -2,30 +2,49 @@
 require_once('../../Classes/ClassParent.php');
 class Calllogs extends ClassParent{
 
-    public function fields(){
-        $sql = <<<EOT
-                select 
-                    column_name as name,
-                    data_type as type
-                from information_schema.columns 
-                where table_name='calllogs'
-                    and column_name not in ('pk','datecreated','createdby')
-                order by ordinal_position asc
-                ;
+    public function fields($archived){
+// old query getting the fields directly from the calllogs table
+//         $sql = <<<EOT
+//                 select 
+//                     column_name as name,
+//                     data_type as type
+//                 from information_schema.columns 
+//                 where table_name='calllogs'
+//                     and column_name not in ('pk','datecreated','createdby')
+//                 order by ordinal_position asc
+//                 ;
+// EOT;
+            $sql = <<<EOT
+                    select
+                        field as name,
+                        type
+                    from fields
+                    where archived = '$archived'
+                    order by datecreated
+                    ;
 EOT;
 
         return ClassParent::getFields($sql);
     }
 
     public function allfields(){
-        $sql = <<<EOT
-                select 
-                    column_name as name,
-                    data_type as type
-                from information_schema.columns 
-                where table_name='calllogs'
-                order by ordinal_position asc
-                ;
+//         $sql = <<<EOT
+//                 select 
+//                     column_name as name,
+//                     data_type as type
+//                 from information_schema.columns 
+//                 where table_name='calllogs'
+//                 order by ordinal_position asc
+//                 ;
+// EOT;
+            $sql = <<<EOT
+                    select
+                        field as name,
+                        type,
+                        archived
+                    from fields
+                    order by datecreated
+                    ;
 EOT;
 
         return ClassParent::getFields($sql);
@@ -41,6 +60,17 @@ EOT;
                     and column_name not in ('pk','datecreated')
                 order by ordinal_position asc
                 ;
+EOT;
+        $sql = <<<EOT
+                    select
+                        field as name,
+                        type,
+                        archived
+                    from fields
+                    where field not in ('pk','datecreated')
+                        and archived = false
+                    order by datecreated
+                    ;
 EOT;
 
         return ClassParent::getFields($sql);
@@ -66,14 +96,15 @@ EOT;
         $fields = implode(',', $fields);
         $values = implode(',', $values);
 
+        $empid = $_COOKIE['empid'];
+
         $sql = <<<EOT
                 insert into calllogs
                 (createdby, $fields)
                 values
-                ('1337008', $values)
+                ('$empid', $values)
                 ;
 EOT;
-
         return ClassParent::insert($sql);
     }
 
@@ -87,17 +118,29 @@ EOT;
         $type = pg_escape_string(trim(strip_tags($data['type'])));
 
         $sql = <<<EOT
-                alter table calllogs add column $field $type;
+                begin;
+                    alter table calllogs add column $field $type;
+                    insert into fields (field,type) values('$field','$type');
+                commit;
 EOT;
 
         return ClassParent::insert($sql);
     }
 
-    public function drop($data){
+    public function archive($data){
         $field = pg_escape_string(trim(strip_tags($data['field'])));
+        $archived = pg_escape_string(trim(strip_tags($data['archived'])));
 
-        $sql = <<<EOT
-                alter table calllogs drop column $field;
+//         $sql = <<<EOT
+//                 begin;
+//                     alter table calllogs drop column $field;
+//                     delete from fields where field = '$field';
+//                 commit;
+
+// EOT;
+            $sql = <<<EOT
+                    update fields set archived = '$archived' 
+                    where field = '$field'; 
 EOT;
 
         return ClassParent::insert($sql);
@@ -113,23 +156,60 @@ EOT;
         $name = pg_escape_string(trim(strip_tags($name)));
 
         $sql = <<<EOT
-                alter table calllogs rename column $field to $name;
+                begin;
+                    alter table calllogs rename column $field to $name;
+                    update fields set field = '$name' where field = '$field';
+                commit;
 EOT;
 
         return ClassParent::insert($sql);
     }
 
-    public function fetchAll($datefrom,$dateto){
+    public function fetchAll($datefrom,$dateto,$author){
+        $empid = "";
+        if($author != 'All'){
+            $empid = " and createdby = '".pg_escape_string(trim(strip_tags($author)))."'";
+        }
+
+
+        $flds = <<<EOT
+                select
+                    field
+                from fields
+                where archived = false
+                order by datecreated
+                ;
+EOT;
+        $fields_arr = ClassParent::get_array($flds);
+
+        $new_fields_arr=array();
+        foreach($fields_arr['data'] as $fld){
+            $pattern = "/\s/";
+            $replacement = "_";
+
+            array_push($new_fields_arr, ucwords(preg_replace($pattern, $replacement, $fld[0])));
+        }
+        
+        $fields = implode(',', $new_fields_arr);
+        
         $sql = <<<EOT
                 select
-                    calllogs.*,
-                    users.firstname||' '||users.lastname as name
+                    pk,
+                    to_char(datecreated,'YYYY-MM-DD HH24:MI') as datecreated,
+                    $fields,
+                    users.firstname||' '||users.lastname as author
                 from calllogs
                 left join users on (users.empid = calllogs.createdby)
                 where datecreated between '$datefrom' and '$dateto'
+                    $empid
                 ;
 EOT;
-        return ClassParent::get_array($sql);
+        $ret = ClassParent::get_array($sql);
+        $ret['fields'] = $new_fields_arr;
+        array_unshift($ret['fields'], 'ID','Date Created');
+        array_push($ret['fields'], 'Author');
+        
+        return $ret;
     }
 
     public function fetchGraph($datefrom,$dateto,$field){
@@ -150,6 +230,16 @@ EOT;
                 ;
 EOT;
         return ClassParent::get($sql);
+    }
+
+    public function delete($pk){
+            $sql = <<<EOT
+                    delete from calllogs 
+                    where pk = $pk
+                    ;
+EOT;
+
+        return ClassParent::update($sql);
     }
 }
 ?>
