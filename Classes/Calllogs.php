@@ -116,11 +116,13 @@ EOT;
         $field = strtolower(preg_replace($pattern, $replacement, $field));
 
         $type = pg_escape_string(trim(strip_tags($data['type'])));
+        $type2 = $type; 
+        $type = ($type=='textarea')?'text':$type;
 
         $sql = <<<EOT
                 begin;
                     alter table calllogs add column $field $type;
-                    insert into fields (field,type) values('$field','$type');
+                    insert into fields (field,type) values('$field','$type2');
                 commit;
 EOT;
 
