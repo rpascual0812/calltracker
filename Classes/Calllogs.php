@@ -79,8 +79,8 @@ EOT;
     public function insert($data){
         $data = json_decode($data);
         
-        $fields=[];
-        $values=[];
+        $fields=array();
+        $values=array();
 
         foreach($data as $info){
             array_push($fields, pg_escape_string(trim(strip_tags($info->field))));

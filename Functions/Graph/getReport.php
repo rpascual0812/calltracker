@@ -6,8 +6,8 @@ $class = new Calllogs();
 
 $data = $class->fetchGraph($_POST['datefrom'],$_POST['dateto'],$_POST['field']);
 
-$chartdata = [];
-$xaxis = [];
+$chartdata = array();
+$xaxis = array();
 
 foreach($data['data'] as $chart){
 	array_push($chartdata, (int)$chart['count']);

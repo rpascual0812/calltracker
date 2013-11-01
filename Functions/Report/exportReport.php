@@ -8,7 +8,7 @@ $data = $class->fetchAll($_GET['datefrom'],$_GET['dateto'],$_GET['empid']);
 
 $date = date('Ymd');
 
-$header=[];
+$header=array();
 $data['fields'][0] = 'ID';
 for($i=0;$i<count($data['fields']);$i++){
 	array_push($header,'"'.$data['fields'][$i].'"');
@@ -18,7 +18,7 @@ $header = implode(',', $header)."\n";
 
 $body='';
 for($i=0;$i<count($data['data']);$i++){
-	$row=[];
+	$row=array();
 	for($j=0;$j<count($data['data'][$i]);$j++){
 		array_push($row,'"'.$data['data'][$i][$j].'"');
 	}
